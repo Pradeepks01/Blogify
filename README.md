@@ -1,64 +1,111 @@
-# 🚀 Blogify Infrastructure & DevOps
+# ✍️ Blogify — The Ultimate Micro-Blogging Engine
 
-Welcome to the **DevOps and Cloud-Native** core of the **Blogify** platform. This repository contains the complete infrastructure-as-code (IaC) and containerization configurations required to deploy the three-tier Blogify application in a scalable, production-ready environment.
+**Blogify** is a sleek, high-performance web application designed for seamless content sharing. It leverages a modern three-tier architecture to deliver a smooth user experience backed by robust server-side processing, reliable data storage, and enterprise-grade DevSecOps infrastructure.
 
 ---
 
-## 🏗️ Cloud Architecture
+## ✨ Features
+- **📝 Create & Edit**: Draft and publish posts instantly with integrated mood/emoji indicators.
+- **💬 Community Threads**: Real-time commenting system to foster community engagement.
+- **🗑️ Full Control**: Complete CRUD operations allowing authors to update or remove their stories.
+- **🎨 Premium Interface**: A modern dark-mode aesthetic featuring fluid glassmorphism elements, micro-animations, and responsive layouts.
 
-The infrastructure leverages **AWS EKS (Elastic Kubernetes Service)** in Auto Mode, provisioned entirely via **Terraform**. The application itself is containerized using Docker and orchestrated via Kubernetes.
+---
+
+## 🏗️ Architecture
+
+The platform operates on a decoupled architecture ensuring separation of concerns:
 
 ```text
-[ Internet / Users ]
-        │
-        ▼ (Port 80)
-┌─────────────────────────────────────────────────┐
-│               EKS Cluster (AWS)                 │
-│                                                 │
-│  ┌─────────────────┐       ┌─────────────────┐  │
-│  │   Frontend      │──────▶│    Backend      │  │
-│  │ (React/Nginx)   │       │ (Node/Express)  │  │
-│  │  2 Replicas     │       │   2 Replicas    │  │
-│  └─────────────────┘       └─────────────────┘  │
-│                                     │           │
-│                                     ▼           │
-│                            ┌─────────────────┐  │
-│                            │   PostgreSQL    │  │
-│                            │   (EBS gp3 PVC) │  │
-│                            └─────────────────┘  │
-└─────────────────────────────────────────────────┘
+[ Client Device ]
+       │
+       ▼ (HTTP/REST)
+┌──────────────────────┐      ┌────────────────────────┐      ┌──────────────────────┐
+│  Presentation Layer  │      │    Application Layer   │      │      Data Layer      │
+│  (React.js & Vite)   │ ───▶ │   (Node.js / Express)  │ ───▶ │     (PostgreSQL)     │
+│   Served via Nginx   │ ◀─── │   Stateless API Host   │ ◀─── │ Relational Storage   │
+└──────────────────────┘      └────────────────────────┘      └──────────────────────┘
 ```
 
 ---
 
-## 📂 Infrastructure Map
+## 📂 Repository Blueprint
 
 ```text
 Blogify/
-├── k8s/                      # Kubernetes Manifests
-│   ├── namespace.yaml        # Dedicated 'blogify' namespace
-│   ├── storage-secrets.yaml  # DB credentials and EBS StorageClass/PVC
-│   ├── database.yaml         # Stateful Postgres deployment
-│   ├── backend.yaml          # Node.js API Deployment & Service
-│   ├── frontend.yaml         # React UI Deployment & Service
-│   └── network-policies.yaml # Zero-trust internal routing rules
-├── terraform/                # Infrastructure as Code (AWS)
-│   ├── provider.tf           # AWS provider and tagging configuration
-│   ├── variables.tf          # Configurable deployment variables
-│   ├── terraform.tfvars      # Environment-specific values
-│   ├── vpc.tf                # Network configuration (Subnets, NAT)
-│   └── eks.tf                # EKS Auto Mode cluster setup
+├── frontend/                 # React (Vite) frontend application
+├── backend/                  # Node.js Express API service
+├── infrastructure/           # EC2 bare-metal automated deployment scripts
+├── kubernetes/               # Modular Kubernetes manifests (Deployments, Services, Secrets)
+├── terraform/                # Infrastructure-as-Code for AWS EKS provisioning
 ├── docker-compose.yml        # Local container orchestration
-└── Dockerfile(s)             # Located in /frontend and /backend
+└── README.md                 # Full project documentation
 ```
+
+---
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/health` | API health check |
+| `GET` | `/api/posts` | Retrieve all blog posts |
+| `GET` | `/api/posts/:id` | Fetch specific post with comments |
+| `POST` | `/api/posts` | Create a new blog post |
+| `PUT` | `/api/posts/:id` | Update an existing post |
+| `DELETE` | `/api/posts/:id` | Delete a blog post |
+| `GET` | `/api/comments/post/:postId` | Get all comments for a specific post |
+| `POST` | `/api/comments` | Create a new comment |
+| `DELETE` | `/api/comments/:id` | Delete a comment |
+
+---
+
+## 🌿 Branch Strategy
+
+The project utilizes a strict branching strategy to separate bare-metal code from cloud-native infrastructure:
+
+| Branch | Purpose |
+|--------|---------|
+| **`main`** | Source code + Traditional EC2 bare-metal deployment (`infrastructure/setup.sh`). |
+| **`devops`** | Full Cloud-Native Infrastructure — Docker, Kubernetes (AWS EKS Auto Mode), Terraform IaC, and security scanning. |
+| **`test`** | Experimental branch used for testing new integrations and CI/CD pipelines. |
+
+---
+
+## 💻 Local Development (Without Docker)
+
+To run Blogify locally natively, ensure you have **Node.js v20+** and **PostgreSQL v16+** installed.
+
+### 1. Database & API
+```bash
+cd backend
+npm install
+
+# Initialize environment variables
+export DB_HOST=localhost
+export DB_PORT=5432
+export DB_USER=blogify_user
+export DB_PASSWORD=blogify_pass_2026
+export DB_NAME=blogify_db
+export PORT=5000
+
+npm start
+```
+
+### 2. Client Interface
+In a separate terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*Frontend runs on `http://localhost:3000` and proxies `/api` to `http://localhost:5000`.*
 
 ---
 
 ## 🐳 Local Development (Docker Compose)
 
-For rapid local testing without spinning up cloud resources, use the provided Docker Compose configuration.
-
-**Requirements**: Docker Desktop or Docker Engine installed.
+For rapid local testing without installing native dependencies:
 
 ```bash
 # Start the full stack (Frontend, Backend, Database)
@@ -67,7 +114,7 @@ docker-compose up -d --build
 # View logs
 docker-compose logs -f
 
-# Shut down and remove volumes
+# Shut down
 docker-compose down -v
 ```
 *Frontend runs on `http://localhost:80` and Backend on `http://localhost:5000`.*
@@ -76,66 +123,44 @@ docker-compose down -v
 
 ## ☁️ Cloud Deployment (Terraform & Kubernetes)
 
+Deploy the full stack to AWS EKS using the Terraform modules and Kubernetes manifests located in the `devops` branch.
+
 ### 1. Provision AWS Infrastructure
-
-Initialize and apply the Terraform modules to create the VPC and EKS cluster.
-
 ```bash
 cd terraform
 terraform init
-terraform plan
 terraform apply --auto-approve
 ```
+*Connect to EKS:* `aws eks update-kubeconfig --region us-east-1 --name blogify-eks`
 
-*Note: Update `terraform.tfvars` if you need to deploy to a specific AWS region or change the cluster name.*
-
-### 2. Connect to EKS
-Once Terraform finishes, update your local kubeconfig:
-
+### 2. Deploy Kubernetes Manifests
 ```bash
-aws eks update-kubeconfig --region us-east-1 --name blogify-eks
-```
-
-### 3. Deploy Kubernetes Manifests
-Apply the modular Kubernetes configurations. Note that resources are applied in order to ensure the namespace and secrets exist before the pods are scheduled.
-
-```bash
-cd ../k8s
-
-# 1. Create Namespace & Secrets
+cd ../kubernetes
 kubectl apply -f namespace.yaml
 kubectl apply -f storage-secrets.yaml
-
-# 2. Deploy Database
 kubectl apply -f database.yaml
-
-# 3. Deploy Application Stack
 kubectl apply -f backend.yaml
 kubectl apply -f frontend.yaml
-
-# 4. Apply Network Policies (Security)
 kubectl apply -f network-policies.yaml
 ```
-
-### 4. Verify Deployment
-Check the status of your pods and services:
-
-```bash
-kubectl get all -n blogify
-```
-
-To access the frontend locally (since a NodePort is used):
-```bash
-kubectl port-forward svc/blogify-frontend 8080:80 -n blogify
-```
-Then visit `http://localhost:8080` in your browser.
+*Access:* `kubectl port-forward svc/blogify-frontend 8080:80 -n blogify`
 
 ---
 
-## 🔐 Security & Best Practices Implemented
+## 🚀 Bare-Metal EC2 Deployment
 
-- **Network Policies**: Strict egress/ingress rules ensuring the DB only accepts traffic from the Backend, and the Backend only accepts traffic from the Frontend.
-- **Least Privilege**: Containers are configured with `runAsNonRoot: true` (where applicable), `allowPrivilegeEscalation: false`, and dropped Linux capabilities.
-- **K8s Secrets**: Base64 encoded secrets injected cleanly via environment variables.
-- **EKS Auto Mode**: Zero-node-management architecture letting AWS handle compute scaling securely.
-- **Read-Only Filesystems**: Configured on backend containers to prevent runtime tampering.
+For a traditional VM-based deployment, use the automated shell script on an Ubuntu 22.04+ EC2 instance.
+
+1. **Upload Source Code**:
+   ```bash
+   scp -r -i your-ssh-key.pem ./Blogify ubuntu@<EC2_IP_ADDRESS>:~/Blogify
+   ```
+
+2. **Connect & Provision**:
+   ```bash
+   ssh -i your-ssh-key.pem ubuntu@<EC2_IP_ADDRESS>
+   cd ~/Blogify
+   chmod +x infrastructure/setup.sh
+   ./infrastructure/setup.sh
+   ```
+*This script automatically handles Node, PostgreSQL, PM2, Nginx setup, and React compilation.*
