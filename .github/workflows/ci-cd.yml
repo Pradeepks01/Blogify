@@ -241,8 +241,8 @@ jobs:
 
       - name: Commit and push manifest update
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "Pradeepks01"
+          git config user.email "pradeepks7483@gmail.com"
           git add kubernetes/backend.yaml kubernetes/frontend.yaml
           git diff --cached --quiet || git commit -m "ci: update kubernetes images to ${{ steps.sha.outputs.short }} [skip ci]"
           git push
