@@ -1,0 +1,17 @@
+# ---- Cost-Optimized Observability (Loki + Grafana + Prometheus) ----
+# 
+# To install the lightweight observability stack, run the following Helm commands:
+#
+# 1. Add Grafana Repo
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm repo update
+#
+# 2. Install Loki (Lightweight Logging)
+# helm install loki grafana/loki-stack --namespace monitoring --create-namespace \
+#   --set promtail.enabled=true,prometheus.enabled=true
+#
+# 3. Install Grafana (Visualization)
+# helm install grafana grafana/grafana --namespace monitoring
+#
+# Justification:
+# Loki + Grafana is significantly more cost-efficient than a full ELK stack for small to medium clusters.
