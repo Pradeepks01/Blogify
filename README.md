@@ -1,166 +1,102 @@
-# ✍️ Blogify — The Ultimate Micro-Blogging Engine
+# ✍️ Blogify — Enterprise DevSecOps Blog Platform
 
-**Blogify** is a sleek, high-performance web application designed for seamless content sharing. It leverages a modern three-tier architecture to deliver a smooth user experience backed by robust server-side processing, reliable data storage, and enterprise-grade DevSecOps infrastructure.
-
----
-
-## ✨ Features
-- **📝 Create & Edit**: Draft and publish posts instantly with integrated mood/emoji indicators.
-- **💬 Community Threads**: Real-time commenting system to foster community engagement.
-- **🗑️ Full Control**: Complete CRUD operations allowing authors to update or remove their stories.
-- **🎨 Premium Interface**: A modern dark-mode aesthetic featuring fluid glassmorphism elements, micro-animations, and responsive layouts.
+**Blogify** is a modern, 3-tier micro-blogging engine engineered with a high-performance React frontend, Node.js API, and PostgreSQL database. This project serves as a full-scale demonstration of **Cloud-Native DevSecOps**, featuring automated infrastructure provisioning, container orchestration, and a robust multi-stage security pipeline.
 
 ---
 
-## 🏗️ Architecture
+## 🚀 Overview
 
-The platform operates on a decoupled architecture ensuring separation of concerns:
-
-```text
-[ Client Device ]
-       │
-       ▼ (HTTP/REST)
-┌──────────────────────┐      ┌────────────────────────┐      ┌──────────────────────┐
-│  Presentation Layer  │      │    Application Layer   │      │      Data Layer      │
-│  (React.js & Vite)   │ ───▶ │   (Node.js / Express)  │ ───▶ │     (PostgreSQL)     │
-│   Served via Nginx   │ ◀─── │   Stateless API Host   │ ◀─── │ Relational Storage   │
-└──────────────────────┘      └────────────────────────┘      └──────────────────────┘
-```
+- **Architecture**: Decoupled 3-tier stack (React + Node.js + PostgreSQL).
+- **Containerization**: Fully Dockerized components with multi-stage builds.
+- **Orchestration**: Production-grade Kubernetes on **AWS EKS (Auto Mode)**.
+- **IaC**: Infrastructure-as-Code via **HashiCorp Terraform** (VPC, EKS, IAM).
+- **CI/CD**: Advanced 10-stage DevSecOps pipeline powered by **GitHub Actions**.
 
 ---
 
-## 📂 Repository Blueprint
+## 🛡️ Security & DevSecOps Practices
+
+The project implements a "Shift-Left" security approach, validating every layer from code to cloud:
+
+- ✅ **Static Analysis**: ESLint code linting for frontend and backend.
+- ✅ **SCA (Software Composition Analysis)**: `npm audit` for identifying vulnerable dependencies.
+- ✅ **Image Security**: **Trivy** vulnerability scanning for all container images.
+- ✅ **Dockerfile Linting**: **Hadolint** to enforce container best practices.
+- ✅ **IaC Security**: **Checkov** scanning for Terraform and Kubernetes manifests.
+- ✅ **Zero-Trust Networking**: Kubernetes **NetworkPolicies** restricting pod-to-pod communication.
+- ✅ **Hardened Containers**: Non-root users, read-only filesystems, and dropped Linux capabilities.
+- ✅ **Data Security**: EKS Secrets encryption at rest using AWS KMS integration.
+
+---
+
+## 🎡 CI/CD Pipeline (All Stages)
+
+The GitHub Actions pipeline is triggered on every push to `main`, `devops`, or `test` branches:
+
+1. **🔍 Lint Scanning** — Validates code quality and syntax.
+2. **🛡️ Dependency Audit (SCA)** — Scans for insecure third-party libraries.
+3. **📋 Dockerfile Lint** — Enforces secure and efficient container builds.
+4. **🏗️ IaC Security Scan** — Validates Terraform and K8s manifests for misconfigurations.
+5. **🐳 Container Build** — Generates optimized multi-stage Docker images.
+6. **🐳 Push to GHCR** — Securely hosts images in GitHub Container Registry.
+7. **🔬 Image Scan** — Deep scanning of built images using Trivy.
+8. **🚀 Auto-update Manifests** — GitOps-style automation updating image tags in Kubernetes files.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, Vite, Nginx (Alpine), CSS3 (Glassmorphism).
+- **Backend**: Node.js 20, Express.js.
+- **Database**: PostgreSQL 16.
+- **Infrastructure**: Terraform, AWS (VPC, EKS, EBS, IAM).
+- **DevOps**: Docker, Kubernetes, GitHub Actions, GHCR.
+- **Security Tools**: Trivy, Checkov, Hadolint, ESLint, npm audit.
+
+---
+
+## 📂 Project Structure
 
 ```text
 Blogify/
-├── frontend/                 # React (Vite) frontend application
-├── backend/                  # Node.js Express API service
-├── infrastructure/           # EC2 bare-metal automated deployment scripts
-├── kubernetes/               # Modular Kubernetes manifests (Deployments, Services, Secrets)
-├── terraform/                # Infrastructure-as-Code for AWS EKS provisioning
-├── docker-compose.yml        # Local container orchestration
-└── README.md                 # Full project documentation
+├── frontend/                # React application + Nginx config
+├── backend/                 # Node.js Express API + DB layer
+├── infrastructure/          # EC2 bare-metal setup (main branch focus)
+├── kubernetes/              # Modular K8s manifests (namespace, secrets, networking)
+├── terraform/               # AWS Infrastructure as Code
+└── .github/workflows/       # 10-stage DevSecOps pipeline definition
 ```
-
----
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/health` | API health check |
-| `GET` | `/api/posts` | Retrieve all blog posts |
-| `GET` | `/api/posts/:id` | Fetch specific post with comments |
-| `POST` | `/api/posts` | Create a new blog post |
-| `PUT` | `/api/posts/:id` | Update an existing post |
-| `DELETE` | `/api/posts/:id` | Delete a blog post |
-| `GET` | `/api/comments/post/:postId` | Get all comments for a specific post |
-| `POST` | `/api/comments` | Create a new comment |
-| `DELETE` | `/api/comments/:id` | Delete a comment |
 
 ---
 
 ## 🌿 Branch Strategy
 
-The project utilizes a strict branching strategy to separate bare-metal code from cloud-native infrastructure:
-
 | Branch | Purpose |
 |--------|---------|
-| **`main`** | Source code + Traditional EC2 bare-metal deployment (`infrastructure/setup.sh`). |
-| **`devops`** | Full Cloud-Native Infrastructure — Docker, Kubernetes (AWS EKS Auto Mode), Terraform IaC, and security scanning. |
-| **`test`** | Experimental branch used for testing new integrations and CI/CD pipelines. |
+| **`main`** | Source code + Traditional EC2 bare-metal deployment. |
+| **`devops`** | Cloud-Native core: Docker, K8s, Terraform, and DevSecOps pipelines. |
+| **`test`** | Experimental branch for testing new features and CI/CD upgrades. |
 
 ---
 
-## 💻 Local Development (Without Docker)
+## 📡 API Reference
 
-To run Blogify locally natively, ensure you have **Node.js v20+** and **PostgreSQL v16+** installed.
-
-### 1. Database & API
-```bash
-cd backend
-npm install
-
-# Initialize environment variables
-export DB_HOST=localhost
-export DB_PORT=5432
-export DB_USER=blogify_user
-export DB_PASSWORD=blogify_pass_2026
-export DB_NAME=blogify_db
-export PORT=5000
-
-npm start
-```
-
-### 2. Client Interface
-In a separate terminal:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*Frontend runs on `http://localhost:3000` and proxies `/api` to `http://localhost:5000`.*
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/health` | Service health status |
+| `GET` | `/api/posts` | Fetch all stories |
+| `POST` | `/api/posts` | Publish a new story |
+| `PUT` | `/api/posts/:id` | Edit an existing story |
+| `DELETE` | `/api/posts/:id` | Remove a story |
+| `POST` | `/api/comments` | Add a response thread |
 
 ---
 
-## 🐳 Local Development (Docker Compose)
+## 🏃 Quick Start (Local Docker)
 
-For rapid local testing without installing native dependencies:
+To run the entire ecosystem locally in seconds:
 
 ```bash
-# Start the full stack (Frontend, Backend, Database)
 docker-compose up -d --build
-
-# View logs
-docker-compose logs -f
-
-# Shut down
-docker-compose down -v
 ```
-*Frontend runs on `http://localhost:80` and Backend on `http://localhost:5000`.*
-
----
-
-## ☁️ Cloud Deployment (Terraform & Kubernetes)
-
-Deploy the full stack to AWS EKS using the Terraform modules and Kubernetes manifests located in the `devops` branch.
-
-### 1. Provision AWS Infrastructure
-```bash
-cd terraform
-terraform init
-terraform apply --auto-approve
-```
-*Connect to EKS:* `aws eks update-kubeconfig --region us-east-1 --name blogify-eks`
-
-### 2. Deploy Kubernetes Manifests
-```bash
-cd ../kubernetes
-kubectl apply -f namespace.yaml
-kubectl apply -f storage-secrets.yaml
-kubectl apply -f database.yaml
-kubectl apply -f backend.yaml
-kubectl apply -f frontend.yaml
-kubectl apply -f network-policies.yaml
-```
-*Access:* `kubectl port-forward svc/blogify-frontend 8080:80 -n blogify`
-
----
-
-## 🚀 Bare-Metal EC2 Deployment
-
-For a traditional VM-based deployment, use the automated shell script on an Ubuntu 22.04+ EC2 instance.
-
-1. **Upload Source Code**:
-   ```bash
-   scp -r -i your-ssh-key.pem ./Blogify ubuntu@<EC2_IP_ADDRESS>:~/Blogify
-   ```
-
-2. **Connect & Provision**:
-   ```bash
-   ssh -i your-ssh-key.pem ubuntu@<EC2_IP_ADDRESS>
-   cd ~/Blogify
-   chmod +x infrastructure/setup.sh
-   ./infrastructure/setup.sh
-   ```
-*This script automatically handles Node, PostgreSQL, PM2, Nginx setup, and React compilation.*
+*Access the UI at `http://localhost:80`.*
