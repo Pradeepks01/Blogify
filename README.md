@@ -24,8 +24,19 @@ The project implements a "Shift-Left" security approach, validating every layer 
 - ✅ **Dockerfile Linting**: **Hadolint** to enforce container best practices.
 - ✅ **IaC Security**: **Checkov** scanning for Terraform and Kubernetes manifests.
 - ✅ **Zero-Trust Networking**: Kubernetes **NetworkPolicies** restricting pod-to-pod communication.
+- ✅ **Runtime Security**: **Falco** deployed as a DaemonSet for real-time threat detection.
 - ✅ **Hardened Containers**: Non-root users, read-only filesystems, and dropped Linux capabilities.
 - ✅ **Data Security**: EKS Secrets encryption at rest using AWS KMS integration.
+
+---
+
+## 💰 Cost-Optimized & Production-Ready Features
+
+- 📈 **Dynamic Scaling (HPA)**: Pods automatically scale based on CPU/Memory utilization to minimize idle compute costs.
+- 🌐 **Managed Ingress (ALB)**: Uses AWS Load Balancer Controller with path-based routing to share a single ALB across all services.
+- 🚢 **Progressive Delivery**: **Argo Rollouts** implemented for safe, automated Canary deployments.
+- 📊 **Lightweight Observability**: Optimized monitoring stack using **Loki, Grafana, and Prometheus** for efficient logging and metrics without high managed-service costs.
+- 🔐 **State Management**: Terraform remote state stored in **Amazon S3** with **DynamoDB** state locking for secure, team-based IaC.
 
 ---
 
@@ -49,9 +60,9 @@ The GitHub Actions pipeline is triggered on every push to `main`, `devops`, or `
 - **Frontend**: React 18, Vite, Nginx (Alpine), CSS3 (Glassmorphism).
 - **Backend**: Node.js 20, Express.js.
 - **Database**: PostgreSQL 16.
-- **Infrastructure**: Terraform, AWS (VPC, EKS, EBS, IAM).
-- **DevOps**: Docker, Kubernetes, GitHub Actions, GHCR.
-- **Security Tools**: Trivy, Checkov, Hadolint, ESLint, npm audit.
+- **Infrastructure**: Terraform, AWS (VPC, EKS, EBS, S3, DynamoDB).
+- **DevOps**: Docker, Kubernetes, Argo Rollouts, GitHub Actions, GHCR.
+- **Security Tools**: Trivy, Checkov, Falco, Hadolint, ESLint, npm audit.
 
 ---
 
@@ -62,8 +73,8 @@ Blogify/
 ├── frontend/                # React application + Nginx config
 ├── backend/                 # Node.js Express API + DB layer
 ├── infrastructure/          # EC2 bare-metal setup (main branch focus)
-├── kubernetes/              # Modular K8s manifests (namespace, secrets, networking)
-├── terraform/               # AWS Infrastructure as Code
+├── kubernetes/              # Modular K8s manifests (HPA, Ingress, Argo, Falco)
+├── terraform/               # AWS Infrastructure as Code (VPC, EKS, S3 Backend)
 └── .github/workflows/       # 10-stage DevSecOps pipeline definition
 ```
 
