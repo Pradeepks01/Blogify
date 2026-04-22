@@ -1,5 +1,15 @@
 terraform {
   required_version = ">= 1.5.0"
+
+  # Cost-optimized remote state storage
+  # backend "s3" {
+  #   bucket         = "blogify-terraform-state"
+  #   key            = "dev/terraform.tfstate"
+  #   region         = "us-east-1"
+  #   dynamodb_table = "blogify-lock-table"
+  #   encrypt        = true
+  # }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
