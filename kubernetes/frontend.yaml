@@ -20,6 +20,11 @@ spec:
         app.kubernetes.io/component: frontend
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        seccompProfile:
+          type: RuntimeDefault
       tolerations:
         - key: "karpenter.sh/disrupted"
           operator: "Exists"

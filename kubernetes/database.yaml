@@ -23,6 +23,12 @@ spec:
     spec:
       # Security: don't automount service account token (DB doesn't need K8s API)
       automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 70
+        runAsNonRoot: true
+        runAsUser: 70
+        seccompProfile:
+          type: RuntimeDefault
       tolerations:
         - key: "karpenter.sh/disrupted"
           operator: "Exists"

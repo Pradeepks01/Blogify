@@ -20,6 +20,11 @@ spec:
         app.kubernetes.io/component: backend
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
       tolerations:
         - key: "karpenter.sh/disrupted"
           operator: "Exists"
@@ -41,7 +46,7 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: 10001
             capabilities:
               drop:
                 - ALL
@@ -87,7 +92,7 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: 10001
             capabilities:
               drop:
                 - ALL
