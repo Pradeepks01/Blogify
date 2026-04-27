@@ -20,6 +20,7 @@ spec:
       containers:
         - name: falco
           image: falcosecurity/falco:latest
+          # checkov:skip=CKV_K8S_16: "Falco requires privileged access for syscall monitoring"
           securityContext:
             privileged: true # Required for syscall monitoring
           args: ["/usr/bin/falco", "-K", "/etc/falco/falco.yaml"]

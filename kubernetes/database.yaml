@@ -52,6 +52,11 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false # Postgres needs write access
             runAsNonRoot: false            # Postgres image runs initdb as root then drops
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           livenessProbe:
             exec:
               command: ["pg_isready", "-U", "blogify_user", "-d", "blogify_db"]
