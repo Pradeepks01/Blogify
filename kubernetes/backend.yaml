@@ -37,6 +37,16 @@ spec:
                 sleep 3
               done
               echo "DB is ready!"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
       containers:
         - name: backend
           image: ghcr.io/Pradeepks01/Blogify/blogify-backend:6bf54ba
@@ -81,6 +91,8 @@ spec:
             capabilities:
               drop:
                 - ALL
+            seccompProfile:
+              type: RuntimeDefault
           livenessProbe:
             httpGet:
               path: /api/health
