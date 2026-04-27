@@ -26,7 +26,7 @@ spec:
           effect: "NoSchedule"
       initContainers:
         - name: wait-for-db
-          image: ghcr.io/Pradeepks01/Blogify/blogify-backend:6bf54ba
+          image: ghcr.io/Pradeepks01/Blogify/blogify-backend:9bef0ad
           command:
             - sh
             - -c
@@ -49,7 +49,7 @@ spec:
               type: RuntimeDefault
       containers:
         - name: backend
-          image: ghcr.io/Pradeepks01/Blogify/blogify-backend:6bf54ba
+          image: ghcr.io/Pradeepks01/Blogify/blogify-backend:9bef0ad
           ports:
             - containerPort: 5000
               protocol: TCP
