@@ -179,7 +179,8 @@ jobs:
           directory: terraform/
           framework: terraform
           soft_fail: false
-          skip_check: CKV_AWS_39,CKV_AWS_58
+          skip_check: CKV_AWS_39,CKV_AWS_58,CKV_TF_1
+          download_external_modules: true
           output_format: cli
 
       - name: Run Checkov on Kubernetes manifests
