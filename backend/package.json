@@ -15,7 +15,7 @@
     "pg": "^8.13.0"
   },
   "overrides": {
-    "path-to-regexp": "0.1.12"
+    "path-to-regexp": "0.1.13"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
