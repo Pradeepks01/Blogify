@@ -31,7 +31,7 @@ spec:
           effect: "NoSchedule"
       containers:
         - name: frontend
-          image: ghcr.io/Pradeepks01/Blogify/blogify-frontend:5c05cb4
+          image: ghcr.io/Pradeepks01/Blogify/blogify-frontend:50b663b
           ports:
             - containerPort: 8080
               protocol: TCP
