@@ -164,7 +164,7 @@ jobs:
   # ==============================================================
   # STAGE 5: IaC Security Scan (Checkov)
   # ==============================================================
-  iac-scan:
+   iac-scan:
     name: "🏗️ IaC Security Scan"
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -178,9 +178,8 @@ jobs:
         with:
           directory: terraform/
           framework: terraform
-          soft_fail: true
-          skip_check: CKV_AWS_39,CKV_AWS_58,CKV_TF_1,CKV_AWS_37
-          download_external_modules: false
+          soft_fail: false
+          skip_check: CKV_AWS_39,CKV_AWS_58
           output_format: cli
 
       - name: Run Checkov on Kubernetes manifests
@@ -190,6 +189,7 @@ jobs:
           framework: kubernetes
           soft_fail: true
           output_format: cli
+
 
   # ==============================================================
   # STAGE 6: Dockerfile Lint (Hadolint)
