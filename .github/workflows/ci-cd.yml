@@ -164,7 +164,7 @@ jobs:
   # ==============================================================
   # STAGE 5: IaC Security Scan (Checkov)
   # ==============================================================
-   iac-scan:
+  iac-scan:
     name: "🏗️ IaC Security Scan"
     runs-on: ubuntu-latest
     continue-on-error: true
